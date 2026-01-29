@@ -1,9 +1,10 @@
+require("dotenv").config();  
 const mysql = require("mysql2/promise");
 
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "bk04090711",
+  password: process.PASS,   // <-- HERE
   database: "bookshop",
   waitForConnections: true,
   connectionLimit: 10

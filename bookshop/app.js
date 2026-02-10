@@ -1,7 +1,17 @@
+require("dotenv").config(); // <-- add this at the very top
+
+
 const express = require("express");
 const session = require("express-session");
+const cors = require("cors");
 
 const app = express();
+
+app.use(cors({
+  origin: "http://localhost:5173", // Vue dev server
+  credentials: true
+}));
+
 app.use(express.json());
 
 app.use(session({
@@ -9,7 +19,6 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
-
 module.exports = app;
 
 

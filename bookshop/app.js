@@ -1,16 +1,10 @@
-require("dotenv").config(); // <-- add this at the very top
+require("dotenv").config(); 
 
 
 const express = require("express");
 const session = require("express-session");
-const cors = require("cors");
 
 const app = express();
-
-app.use(cors({
-  origin: "http://localhost:5173", // Vue dev server
-  credentials: true
-}));
 
 app.use(express.json());
 
@@ -42,7 +36,7 @@ app.post("/register", async (req, res) => {
 });
 
 
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
 
   const [rows] = await db.execute(
@@ -69,13 +63,36 @@ function auth(req, res, next) {
 }
 
 
-app.get("/books", auth, async (req, res) => {
+app.get("/api/books", auth, async (req, res) => {
   const [rows] = await db.execute("SELECT * FROM books");
   res.json(rows);
 });
 
+app.get("/api/is-logged", auth, async (req, res) => {
+  try {
+    const userId = req.session.userId;
 
-app.get("/books/:id", auth, async (req, res) => {
+    const [rows] = await db.execute(
+      "SELECT username FROM users WHERE id = ?",
+      [userId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      logged: true,
+      username: rows[0].username
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+app.get("/api/books/:id", auth, async (req, res) => {
   const [rows] = await db.execute(
     "SELECT * FROM books WHERE id = ?",
     [req.params.id]

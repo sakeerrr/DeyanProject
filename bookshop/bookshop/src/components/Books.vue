@@ -6,7 +6,7 @@ const error = ref(null);
 
 onMounted(async () => {
   try {
-    const res = await fetch("http://localhost:3000/books", {
+    const res = await fetch("api/books", {
       credentials: "include" // send session cookie
     });
 

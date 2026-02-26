@@ -7,7 +7,7 @@ const error = ref(null);
 
 async function login() {
   try {
-    const res = await fetch("http://localhost:3000/login", {
+    const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

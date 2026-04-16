@@ -19,7 +19,7 @@ module.exports = app;
 const bcrypt = require("bcrypt");
 const db = require("./db");
 
-app.post("/api/register", async (req, res) => {
+app.post("/register", async (req, res) => {
   const { username, password } = req.body;
 
   const hash = await bcrypt.hash(password, 10);
